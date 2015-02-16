@@ -1,0 +1,7 @@
+Thumbs.db
+**/Thumbs.db
+*.bak
+[Bb][iI][nN]/
+[Oo][Bb][Jj]/
+packages/
+
