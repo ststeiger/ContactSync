@@ -44,8 +44,59 @@ namespace OutlookContactSync
 
 
 
+        Outlook.Inspectors inspectors;
+
+        void ThisAddIn_Quit()
+        {
+            // System.Threading.Thread.Sleep(10 * 1000);
+            System.Windows.Forms.MessageBox.Show("bye bye problem, I found the solution!!");
+        }
+
+
+        public void OnWrite(ref bool Cancel)
+        {
+            MsgBox("OnWrite");
+        }
+
+
+        void Inspectors_NewInspector(Microsoft.Office.Interop.Outlook.Inspector Inspector)
+        {
+
+            Outlook.ContactItem contactitem = Inspector.CurrentItem as Outlook.ContactItem;
+            if (contactitem != null)
+            {
+                MsgBox("address");
+                // contactitem.BeforeAttachmentSave += contactitem_BeforeAttachmentSave;
+                // contactitem.BeforeAutoSave += BeforeAutoSave;
+                contactitem.Write += OnWrite;
+            }
+
+            Outlook.MailItem mailItem = Inspector.CurrentItem as Outlook.MailItem;
+            if (mailItem != null)
+            {
+                if (mailItem.EntryID == null)
+                {
+                    mailItem.Subject = "This text was added by using code";
+                    mailItem.Body = "This text was added by using code";
+                }
+
+            }
+        }
+
+
         private void ThisAddIn_Startup(object sender, System.EventArgs e)
         {
+
+            // http://stackoverflow.com/questions/24532211/outlook-add-in-outlook-shutdown-event
+            ((Outlook.ApplicationEvents_11_Event)Application).Quit
++= new Outlook.ApplicationEvents_11_QuitEventHandler(ThisAddIn_Quit);
+
+
+
+            inspectors = this.Application.Inspectors;
+            inspectors.NewInspector +=
+            new Microsoft.Office.Interop.Outlook.InspectorsEvents_NewInspectorEventHandler(Inspectors_NewInspector);
+
 
             Outlook.ContactItem ca = null;
 
@@ -53,25 +104,30 @@ namespace OutlookContactSync
             Outlook.MAPIFolder fo = Application.Session.GetDefaultFolder(Outlook.OlDefaultFolders.olFolderContacts);
 
 
-            Outlook.Recipient x = Application.Session.CurrentUser;
             
+            
+
+            Outlook.Recipient x = Application.Session.CurrentUser;
+            Outlook.ExchangeUser exchangeUser = x.AddressEntry.GetExchangeUser();
+            string userMail = null;
+            if(exchangeUser != null)
+                userMail = exchangeUser.PrimarySmtpAddress;
+            else
+                userMail = System.DirectoryServices.AccountManagement.UserPrincipal.Current.EmailAddress;
+
+            if(string.IsNullOrEmpty(userMail))
+                // userMail = this.Application.ActiveExplorer().Session.CurrentUser.Address;
+                userMail = Application.Session.CurrentUser.Address;
+            
+            MsgBox(userMail);
+
+
             // string lol = x.Address;
             // string lol = x.AddressEntry.Address;
 
             // x.AddressEntry.ID
-
-            string name = x.AddressEntry.Name;
-            Outlook.ExchangeUser user = x.AddressEntry.GetExchangeUser();
-            string lol2 = x.AddressEntry.GetExchangeUser().PrimarySmtpAddress;
-            string lol3 = System.DirectoryServices.AccountManagement.UserPrincipal.Current.EmailAddress;
-            // UserPrincipal.Current.EmailAddress
-
-
-            
-
-
-
-            string name2 = x.Name;
+            // string name = x.AddressEntry.Name;
+            // string name2 = x.Name;
             
 
             
