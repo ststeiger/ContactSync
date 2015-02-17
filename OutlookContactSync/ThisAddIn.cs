@@ -128,9 +128,10 @@ namespace OutlookContactSync
             // x.AddressEntry.ID
             // string name = x.AddressEntry.Name;
             // string name2 = x.Name;
-            
 
-            
+
+            // https://msdn.microsoft.com/en-us/library/office/ee692172(v=office.14).aspx
+            // Table 1. Ribbon IDs and Message Class
             Outlook.Items contacts = fo.Items.Restrict("[MessageClass]='IPM.Contact'");
 
             // Find existinc contact
