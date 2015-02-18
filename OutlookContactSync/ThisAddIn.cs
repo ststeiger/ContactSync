@@ -82,6 +82,82 @@ namespace OutlookContactSync
         } // End Sub Inspectors_NewInspector
 
 
+        // https://msdn.microsoft.com/en-us/library/01escwtf(v=vs.110).aspx
+        public class RegexUtilities
+        {
+            bool invalid = false;
+
+            public bool IsValidEmail(string strIn)
+            {
+                invalid = false;
+                if (string.IsNullOrEmpty(strIn))
+                    return false;
+
+                // Use IdnMapping class to convert Unicode domain names. 
+                try
+                {
+                    // strIn = System.Text.RegularExpressions.Regex.Replace(strIn, @"(@)(.+)$", this.DomainMapper,
+                    //                       System.Text.RegularExpressions.RegexOptions.None, System.TimeSpan.FromMilliseconds(200));
+
+                    strIn = System.Text.RegularExpressions.Regex.Replace(strIn, @"(@)(.+)$", this.DomainMapper, System.Text.RegularExpressions.RegexOptions.None);
+                }
+                //catch (System.Text.RegularExpressions.RegexMatchTimeoutException)
+                catch (System.TimeoutException)
+                {
+                    return false;
+                }
+
+                if (invalid)
+                    return false;
+
+                // Return true if strIn is in valid e-mail format. 
+                try
+                {
+                    return System.Text.RegularExpressions.Regex.IsMatch(strIn,
+                          @"^(?("")("".+?(?<!\\)""@)|(([0-9a-z]((\.(?!\.))|[-!#\$%&'\*\+/=\?\^`\{\}\|~\w])*)(?<=[0-9a-z])@))" +
+                          @"(?(\[)(\[(\d{1,3}\.){3}\d{1,3}\])|(([0-9a-z][-\w]*[0-9a-z]*\.)+[a-z0-9][\-a-z0-9]{0,22}[a-z0-9]))$",
+                          System.Text.RegularExpressions.RegexOptions.IgnoreCase); //, System.TimeSpan.FromMilliseconds(250));
+                }
+                //catch (System.Text.RegularExpressions.RegexMatchTimeoutException)
+                catch (System.TimeoutException)
+                {
+                    return false;
+                }
+            }
+
+            private string DomainMapper(System.Text.RegularExpressions.Match match)
+            {
+                // IdnMapping class with default property values.
+                System.Globalization.IdnMapping idn = new System.Globalization.IdnMapping();
+
+                string domainName = match.Groups[2].Value;
+                try
+                {
+                    domainName = idn.GetAscii(domainName);
+                }
+                catch (System.ArgumentException)
+                {
+                    invalid = true;
+                }
+                return match.Groups[1].Value + domainName;
+            }
+        }
+
+
+        bool IsValidEmail(string email)
+        {
+            try
+            {
+                var addr = new System.Net.Mail.MailAddress(email);
+                return addr.Address == email;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+
         private void ThisAddIn_Startup(object sender, System.EventArgs e)
         {
 
@@ -102,7 +178,9 @@ namespace OutlookContactSync
             Outlook.MAPIFolder fo = Application.Session.GetDefaultFolder(Outlook.OlDefaultFolders.olFolderContacts);
 
 
-            
+
+            string foouserMail = Application.Session.CurrentUser.Address;
+            System.Console.WriteLine(foouserMail);
             
 
             Outlook.Recipient x = Application.Session.CurrentUser;
