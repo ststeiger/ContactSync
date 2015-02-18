@@ -1,9 +1,9 @@
 ﻿
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Xml.Linq;
+// using System;
+// using System.Collections.Generic;
+// using System.Linq;
+// using System.Text;
+// using System.Xml.Linq;
 using Outlook = Microsoft.Office.Interop.Outlook;
 using Office = Microsoft.Office.Core;
 
@@ -14,6 +14,7 @@ namespace OutlookContactSync
 
     public partial class ThisAddIn
     {
+
 
         public void Deploy()
         { 
@@ -37,10 +38,7 @@ namespace OutlookContactSync
             // "FriendlyName"="OutlookContactSync"
             // "LoadBehavior"=dword:00000003
             // "Manifest"="file:///d:/stefan.steiger/documents/visual studio 2013/Projects/OutlookContactSync/OutlookContactSync/bin/Debug/OutlookContactSync.vsto|vstolocal"
-
-
-
-        }
+        } // End Sub Deploy
 
 
 
@@ -50,13 +48,13 @@ namespace OutlookContactSync
         {
             // System.Threading.Thread.Sleep(10 * 1000);
             System.Windows.Forms.MessageBox.Show("bye bye problem, I found the solution!!");
-        }
+        } // End Sub ThisAddIn_Quit
 
 
         public void OnWrite(ref bool Cancel)
         {
             MsgBox("OnWrite");
-        }
+        } // End Sub OnWrite
 
 
         void Inspectors_NewInspector(Microsoft.Office.Interop.Outlook.Inspector Inspector)
@@ -81,7 +79,7 @@ namespace OutlookContactSync
                 }
 
             }
-        }
+        } // End Sub Inspectors_NewInspector
 
 
         private void ThisAddIn_Startup(object sender, System.EventArgs e)
@@ -144,19 +142,15 @@ namespace OutlookContactSync
                 
             }
 
-
-            
-            
-
             // ca.EntryID
 
-        }
+        } // End Sub ThisAddIn_Startup
 
 
 
         private void ThisAddIn_Shutdown(object sender, System.EventArgs e)
         {
-        }
+        } // End Sub ThisAddIn_Shutdown
 
 
         public static void MsgBox(object obj)
@@ -166,11 +160,11 @@ namespace OutlookContactSync
                 System.Windows.Forms.MessageBox.Show(obj.ToString());
             else
                 System.Windows.Forms.MessageBox.Show("obj IS NULL");
-        }
+        } // End Sub MsgBox
 
 
 
-        #region Von VSTO generierter Code
+        // Von VSTO generierter Code
 
         /// <summary>
         /// Erforderliche Methode für die Designerunterstützung.
@@ -182,8 +176,10 @@ namespace OutlookContactSync
             this.Shutdown += new System.EventHandler(ThisAddIn_Shutdown);
         }
         
-        #endregion
-    }
+        // End VSTO gen. Code
+        
+        
+    } // End Class ThisAddIn
 
 
-}
+} // End Namespace OutlookContactSync
