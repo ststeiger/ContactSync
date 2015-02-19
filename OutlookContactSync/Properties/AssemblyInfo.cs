@@ -33,6 +33,6 @@ using System.Security;
 // Sie können alle Werte angeben oder die standardmäßigen Build- und Revisionsnummern 
 // übernehmen, indem Sie "*" eingeben:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("2015.2.16.1155")]
-[assembly: AssemblyFileVersion("2015.2.16.1155")]
+[assembly: AssemblyVersion("2015.2.19.1022")]
+[assembly: AssemblyFileVersion("2015.2.19.1022")]
 
