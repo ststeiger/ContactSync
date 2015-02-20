@@ -171,6 +171,7 @@
     can be found.
   -->
   <ItemGroup>
+    <Compile Include="AppCode\Helpers\Test.cs" />
     <Compile Include="AppCode\Sync.cs" />
     <Compile Include="AppCode\Helpers\HelperMethods.cs" />
     <Compile Include="AppCode\Helpers\Inspector.cs" />
